@@ -5,6 +5,7 @@ import {ROUTE_CONSTANTS} from "../../lib/Routes";
 import {Restaurant} from "../Resturant/Restaurant";
 import AuthContainer from "../../containers/AuthContainer";
 import Login from "../Login/Login";
+import Table from "../Table/Table";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
 
             <Switch>  
                 <Route path={ROUTE_CONSTANTS.LOGIN} exact component={Login}/>
+                <Route path={ROUTE_CONSTANTS.TABLE} exact component={Table}/>
                 <Route path={ROUTE_CONSTANTS.RESTAURANT} exact component={Restaurant}/>
                 <Route
                     path="*"
