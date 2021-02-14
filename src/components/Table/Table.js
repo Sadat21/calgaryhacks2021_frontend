@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import {getAuth, getDb} from '../../lib/Firebase';
+import {TextField} from "@material-ui/core";
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -48,7 +49,10 @@ const useStyles = makeStyles({
 export default function CustomizedTables() {
     const classes = useStyles();
 
+    const [search, setSearch] = useState("")
     const [data, setData] = useState([])
+
+    const [displayData, setDisplayData] = useState(data)
 
     let rows = [
         createData('Raiyan', 'Kabir', 'raiyankabir23@gmail.com', '825-994-5968'),
@@ -57,7 +61,6 @@ export default function CustomizedTables() {
     ];
 
     useEffect(() => {
-
         getDb().collection("Customers").onSnapshot((doc) => {
             const customers = doc.docs.map(document => {
                 return document.data();
@@ -66,14 +69,25 @@ export default function CustomizedTables() {
             console.log(customers);
             setData(customers)
         })
+    }, [data]);
 
+    useEffect(() => {
+        setDisplayData(data)
 
-        rows = createData('John', 'Doe', 'jd23@gmail.com', '403-444-2222');
-        //setData([rows]);
-    }, []);
+    }, [data]);
+
+    useEffect(() => {
+        const newData = data.filter((x) => {
+            console.log(x)
+        });
+        setDisplayData(newData)
+    }, [search])
 
     return (
         <TableContainer component={Paper}>
+            <TextField id="standard-basic" label="Standard" value={search} onChange={(event) => {
+                setSearch(event.target.value);
+            }}/>
             <Table classfirstName={classes.table} aria-label="customized table">
                 <TableHead>
                     <TableRow>
@@ -84,7 +98,7 @@ export default function CustomizedTables() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data.map((row) => (
+                    {displayData.map((row) => (
                         <StyledTableRow key={row.firstName}>
                             <StyledTableCell component="th" scope="row">
                                 {row.firstName}
