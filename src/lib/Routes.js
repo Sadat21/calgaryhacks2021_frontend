@@ -1,5 +1,5 @@
 export const ROUTE_CONSTANTS = {
-    LOGIN: '/login',
     RESTAURANT: '/restaurant',
-    LOGIN: '/login'
+    LOGIN: '/login',
+    TABLE: '/table'
 };

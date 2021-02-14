@@ -50,7 +50,7 @@ const AuthContainer = (props) => {
             };
         }
     }, [dispatch, userId]);
-
+/*
     useEffect(() => {
         if (!userId && props.location.pathname !== ROUTE_CONSTANTS.RESTAURANT) {
             props.history.push(ROUTE_CONSTANTS.LOGIN);
@@ -58,7 +58,7 @@ const AuthContainer = (props) => {
             props.history.push("/");
         }
     }, [props.history, props.location.pathname, userId]);
-
+*/
     return <div id={'AuthContainer'} />;
 };
 
