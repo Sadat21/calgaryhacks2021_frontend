@@ -5,6 +5,7 @@ import { Button, Container, Paper, TextField } from "@material-ui/core";
 import { GuestInfo } from "./GuestInfo/GuestInfo";
 import "./Restaurant.css";
 
+
 export function Restaurant() {
   const [numOfGuests, setNumOfGuests] = useState(0);
   const [guestList, setGuestList] = useState([]);
