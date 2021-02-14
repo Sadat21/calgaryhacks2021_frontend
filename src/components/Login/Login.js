@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {getAuth} from "../../lib/Firebase";
+import MuiAlert from '@material-ui/lab/Alert';
+import {Snackbar} from "@material-ui/core";
+
 
 function Copyright() {
   return (
@@ -24,6 +28,10 @@ function Copyright() {
       {'.'}
     </Typography>
   );
+}
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +57,29 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const classes = useStyles();
 
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [open, setOpen] = useState(false);
+
+
+  const login = () => {
+    getAuth()
+        .signInWithEmailAndPassword(username, password)
+        .catch((reason) => {
+          setErrorMessage(reason.message);
+          setOpen(true);
+        });
+  }
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -69,6 +100,10 @@ export default function SignIn() {
             label="Email Address"
             name="email"
             autoComplete="email"
+            value={username}
+            onChange={(changeEvent) => {
+              setUsername(changeEvent.target.value);
+            }}
             autoFocus
           />
           <TextField
@@ -80,38 +115,36 @@ export default function SignIn() {
             label="Password"
             type="password"
             id="password"
+            value={password}
+            onChange={(changeEvent) => {
+              setPassword(changeEvent.target.value);
+            }}
             autoComplete="current-password"
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
           <Button
-            type="submit"
             fullWidth
             variant="contained"
             color="primary"
+            onClick={login}
             className={classes.submit}
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
       <Box mt={8}>
         <Copyright />
       </Box>
+        <Snackbar
+            open={open}
+            autoHideDuration={6000}
+            onClose={handleClose}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+            <Alert onClose={handleClose} severity="error">
+                {errorMessage}
+            </Alert>
+        </Snackbar>
     </Container>
   );
 }      
